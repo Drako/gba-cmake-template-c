@@ -1,27 +1,21 @@
-#include <tonc.h>
+#include <gba.h>
 
-EWRAM_DATA COLOR image[M3_WIDTH*M3_HEIGHT];
+EWRAM_DATA u16 image[SCREEN_WIDTH*SCREEN_HEIGHT];
 
 int __attribute__((noreturn)) main(void)
 {
-  irq_init(NULL);
-  irq_enable(II_VBLANK);
-  REG_DISPCNT = DCNT_MODE3 | DCNT_BG2;
+  irqInit();
+  irqEnable(IRQ_VBLANK);
+  SetMode(MODE_3 | BG2_ENABLE);
 
-  VBlankIntrWait();
-  m3_frame(10, M3_HEIGHT-12, M3_WIDTH-10, M3_HEIGHT-9, CLR_WHITE);
-  VBlankIntrWait();
-
-  for (int y = 0; y<M3_HEIGHT; ++y) {
-    for (int x = 0; x<M3_WIDTH; ++x) {
-      int const index = y*M3_WIDTH+x;
-      image[index] = RGB15(x*31/M3_WIDTH, y*31/M3_HEIGHT, 0);
-      int const progress = (index*(M3_WIDTH-22))/(M3_WIDTH*M3_HEIGHT);
-      m3_plot(11+progress, M3_HEIGHT-11, CLR_RED);
+  for (int y = 0; y<SCREEN_HEIGHT; ++y) {
+    for (int x = 0; x<SCREEN_WIDTH; ++x) {
+      int const index = y*SCREEN_WIDTH+x;
+      image[index] = RGB5(x*31/SCREEN_WIDTH, y*31/SCREEN_HEIGHT, 0);
     }
   }
 
-  dma_cpy(vid_mem, image, M3_WIDTH*M3_HEIGHT, 3, DMA_16 | DMA_AT_VBLANK | DMA_ENABLE);
+  DMA_Copy(3, image, VRAM, DMA_VBLANK | DMA16);
 
   for (;;) {
     VBlankIntrWait();
