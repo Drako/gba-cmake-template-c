@@ -19,7 +19,7 @@ find_library(LIBGBA_LIBRARY
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-    libgba
+    Libgba
     FOUND_VAR LIBGBA_FOUND
     REQUIRED_VARS LIBGBA_LIBRARY LIBGBA_INCLUDE_DIR
 )

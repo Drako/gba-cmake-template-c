@@ -19,7 +19,7 @@ find_library(LIBTONC_LIBRARY
 
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
-    libtonc
+    Libtonc
     FOUND_VAR LIBTONC_FOUND
     REQUIRED_VARS LIBTONC_LIBRARY LIBTONC_INCLUDE_DIR
 )
