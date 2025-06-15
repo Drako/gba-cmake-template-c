@@ -4,6 +4,18 @@ include_guard(GLOBAL)
 
 set(CMAKE_EXECUTABLE_SUFFIX .elf)
 
+function(add_gba_library target)
+  add_library(${target} STATIC ${ARGN})
+  target_compile_options(${target} PRIVATE
+      -march=armv4t -mtune=arm7tdmi -mthumb -mthumb-interwork
+      -ffunction-sections -fdata-sections -D__GBA__ -DARM7
+  )
+  target_link_options(${target} PRIVATE
+      -ffunction-sections -fdata-sections -D__GBA__ -DARM7
+      -specs=gba.specs
+  )
+endfunction()
+
 function(add_gba_executable target)
   set(GBA_FLAGS PAD)
   set(GBA_SINGLE_ARG VERSION TITLE GAMECODE MAKERCODE ROMNAME)
